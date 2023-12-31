@@ -1,15 +1,11 @@
-import { App, Button, Card, Checkbox, Form, Radio, Select } from 'antd';
+import { App, Button, Card, Checkbox, Form, Radio, Select, Switch } from 'antd';
 import { useState } from 'react';
-
-interface SettingData {
-  screenshotAfter: string[];
-  screenshotSavePath: string;
-  screenshotFileNameType: string;
-}
+import { SettingData } from '../../../lib/settings';
 
 export const SettingsTab = () => {
   const [settings, setSettings] = useState<SettingData>(window.myAPI.sync('getAppSettings'));
   const { modal } = App.useApp();
+  console.log(settings.autoStart);
   return (
     <div className='m-3'>
       <Form
@@ -60,6 +56,12 @@ export const SettingsTab = () => {
             <Radio.Button value='capture-y-m-d_hms'>{'{년-월-일}_{시분초}'}</Radio.Button>
             <Radio.Button value='capture-incremental'>{'{순번}'}</Radio.Button>
           </Radio.Group>
+        </Form.Item>
+        <Form.Item
+          name='autoStart'
+          label='[윈도우 시작 시 자동시작]'
+          initialValue={settings.autoStart ? 'checked' : ''}>
+          <Switch />
         </Form.Item>
         {/* <Form.Item
           className='mb-2'

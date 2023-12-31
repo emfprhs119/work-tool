@@ -14,7 +14,7 @@ import settings from 'electron-settings';
 import path from 'path';
 import { copyFileSync, writeFileSync } from 'fs';
 import { generateSavePath } from '../lib/generateSavePath';
-import { getAppSettings } from '../lib/settings';
+import { getAppSettings, instantSettingsChange } from '../lib/settings';
 import { createFloatTextWindow } from './floatText';
 
 export const asyncFn = (_e: Electron.IpcMainInvokeEvent, args: any[]) => {
@@ -52,10 +52,16 @@ export const asyncFn = (_e: Electron.IpcMainInvokeEvent, args: any[]) => {
       createFloatImageWindow(cropImagePath, { width: val.rect.width, height: val.rect.height });
     copyClipboardImg(cropImage);
   } else if (key === 'setAppSettings') {
-    const nextSettings = (settings.getSync('app.settings') as any) ?? {};
-    nextSettings[val.name] = val.value;
-    settings.set('app.settings', nextSettings);
-  } else if (key === 'resetAppSettings') settings.set('app.settings', {});
+    const beforeSettings = getAppSettings();
+    const afterSettings = getAppSettings();
+    (afterSettings as any)[val.name] = val.value;
+    settings.setSync('app.settings', afterSettings);
+    instantSettingsChange(beforeSettings, afterSettings);
+  } else if (key === 'resetAppSettings') {
+    const beforeSettings = getAppSettings();
+    settings.setSync('app.settings', {});
+    instantSettingsChange(beforeSettings, getAppSettings());
+  }
 };
 
 export const syncFn = (_e: Electron.IpcMainEvent, args: any[]) => {

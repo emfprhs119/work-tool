@@ -1,4 +1,5 @@
 import { app } from 'electron';
+import { getAppSettings } from '../lib/settings';
 
 export const autoStart = () => {
   const AutoLaunch = require('auto-launch');
@@ -11,10 +12,12 @@ export const autoStart = () => {
   autoLauncher
     .isEnabled()
     .then(function (isEnabled: boolean) {
-      if (isEnabled) {
+      const isAutoStart = getAppSettings().autoStart;
+      if (isEnabled && !isAutoStart) {
+        autoLauncher.disable();
         return;
       }
-      autoLauncher.enable();
+      if (!isEnabled && isAutoStart) autoLauncher.enable();
     })
     .catch(function (err: Error) {
       console.error(err);
