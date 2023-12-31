@@ -1,0 +1,12 @@
+dist
+release
+node_modules
+coverage/coverage-summary.json
+
+.vscode
+.env
+.DS_Store
+
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
