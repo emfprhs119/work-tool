@@ -7,12 +7,11 @@
   "main": "dist/main.js",
   "scripts": {
     "dev": "rimraf dist && run-p dev:esbuild dev:electron",
-    "thirdparty": "xcopy thirdparty dist /y/d/e",
-    "prebuild": "rimraf dist",
+    "copy:res": "xcopy thirdparty dist /y/d/e/i && xcopy assets dist\\assets /y/d/e/i",
+    "prebuild": "rimraf dist && npm run copy:res",
     "build": "tsc && cross-env NODE_ENV=\"production\" ts-node ./esbuild.ts",
-    "postbuild": "npm run thirdparty",
     "dev:esbuild": "cross-env NODE_ENV=\"development\" ts-node ./esbuild.ts",
-    "dev:electron": "wait-on dist/main.js dist/index.html && npm run thirdparty && electronmon .",
+    "dev:electron": "wait-on dist/main.js dist/index.html && npm run copy:res && electronmon .",
     "test": "jest",
     "package": "ts-node ./builder.ts"
   },

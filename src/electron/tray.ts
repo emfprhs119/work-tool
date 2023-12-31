@@ -1,8 +1,9 @@
 import { BrowserWindow, Menu, Tray } from 'electron';
 import { makeContextMenu } from './contextMenu';
+import path from 'path';
 
 export const createTrayIcon = (win: BrowserWindow) => {
-  const tray = new Tray('assets/icon.ico');
+  const tray = new Tray(path.join(__dirname, 'assets', 'icon.ico'));
 
   tray.on('click', () => {
     if (!win.isVisible()) {

@@ -1,9 +1,7 @@
-import { BrowserWindow, app, dialog, nativeImage } from 'electron';
+import { BrowserWindow } from 'electron';
 import path from 'path';
 import { adjustContextMenu, makeContextMenu } from './contextMenu';
-import { copyClipboard, copyClipboardImg } from './clipboardWork';
-import { copyFileSync } from 'fs';
-import { generateSavePath } from '../lib/generateSavePath';
+import { copyClipboard } from './clipboardWork';
 
 export function createFloatTextWindow(
   text: string,
