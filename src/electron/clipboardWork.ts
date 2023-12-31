@@ -4,9 +4,11 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 import { mkdirSync, readFile, unlinkSync, writeFile, writeFileSync } from 'fs';
 import { ClipboardData } from '../@types/Context';
+
 export const clipboardTmp: ClipboardData[] = [];
-const jsonPath = path.join(app.getPath('userData'), 'clipboard.json');
 export const imgBasePath = path.join(app.getPath('userData'), 'png');
+const jsonPath = path.join(app.getPath('userData'), 'clipboard.json');
+
 mkdirSync(imgBasePath, { recursive: true });
 let preventOnce = false;
 

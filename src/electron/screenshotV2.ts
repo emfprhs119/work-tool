@@ -126,7 +126,6 @@ export function screenshot() {
     if (!err && data) {
       try {
         const coordArr = data.match(/\([\-\d,]*\)/g);
-        console.log(data);
         if (coordArr && coordArr.length == 2) {
           const ltRaw = coordArr[0].split(',');
           const x = parseInt(ltRaw[0].replace('(', ''));
@@ -142,6 +141,6 @@ export function screenshot() {
         console.error(e);
       }
     }
-    console.log('fail screenshot');
+    console.warn('fail screenshot');
   });
 }
