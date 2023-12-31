@@ -7,6 +7,7 @@ import { startClipboardListening } from './electron/clipboardWork';
 import { screenshot } from './electron/screenshotV2';
 import { windowStateKeeper } from './lib/stateKeeper';
 import { createTrayIcon } from './electron/tray';
+import { autoStart } from './electron/autostart';
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
@@ -55,9 +56,8 @@ if (!gotTheLock) {
     createWindow();
     ipcMain.on('sync', syncFn);
     ipcMain.handle('async', asyncFn);
-    const ret = globalShortcut.register('CommandOrControl+Shift+S', () => {
-      screenshot();
-    });
+    globalShortcut.register('CommandOrControl+Shift+S', screenshot);
+    autoStart();
   });
   app.once('window-all-closed', () => app.quit());
 }
