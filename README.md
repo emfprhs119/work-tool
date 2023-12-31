@@ -12,7 +12,7 @@
    - 자체 캡처 지원 (Ctrl + Shift + S)
    - 설정을 통한 저장경로, 캡처 후 동작 지원
 
-<img width="640" alt="demo" src="https://github.com/emfprhs119/work-tool/raw/master/screenshot/demo.png" />
+<img width="640" alt="demo" src="https://github.com/emfprhs119/work-tool/blob/main/screenshot/demo.png?raw=true" />
 
 ## Usage
 
