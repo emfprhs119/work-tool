@@ -23,7 +23,10 @@ const PathIcon = ({ path, icon }: { path: string; icon: string }) => {
   const isSelected = location.pathname === path;
   return (
     <a href={`#main${path}`} className='group'>
-      <Icon icon={icon} className={`p-4 group-hover:fill-gray-300 ${isSelected ? 'fill-gray-300' : 'fill-gray-500'}`} />
+      <Icon
+        icon={icon}
+        className={`p-4 h-16 group-hover:fill-gray-300 ${isSelected ? 'fill-gray-300' : 'fill-gray-500'}`}
+      />
     </a>
   );
 };

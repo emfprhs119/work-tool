@@ -18,7 +18,7 @@ export const App = () => {
   return (
     <Layout style={{ width: '100vw', height: '100vh' }}>
       <Sider className='inactive ' width={64} style={{ backgroundColor: 'rgb(3 7 18)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', height: '100%' }}>
+        <div className='flex flex-col justify-between h-screen'>
           <SideTopBar />
           <SideBottomBar />
         </div>
