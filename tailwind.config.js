@@ -15,5 +15,13 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-  plugins: [],
+  plugins: [
+    ({ addUtilities }) => {
+      addUtilities({
+        '.bg-default-hover': {
+          '@apply bg-gray-700 hover:bg-gray-800': '',
+        },
+      });
+    },
+  ],
 };

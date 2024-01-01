@@ -43,7 +43,7 @@ export const ClipboardRow = ({ row, style }: ListRowProps & { row: ClipboardData
         });
       }}
       onContextMenu={() => window.myAPI.async('openFloatWindow', row)}
-      className='relative border-0 border-solid border-b cursor-pointer break-all break-word overflow-hidden border:gray-100 border-gray-600 bg-gray-700 hover:bg-gray-800'>
+      className='relative border-0 border-solid border-b cursor-pointer break-all break-word overflow-hidden border:gray-100 border-gray-600 bg-default-hover'>
       {getContentData(row)}
       <div
         title='favorite'
@@ -56,9 +56,7 @@ export const ClipboardRow = ({ row, style }: ListRowProps & { row: ClipboardData
         <Icon
           icon={'star-full'}
           style={{ right: '9px' }}
-          className={`absolute top-1 w-4 h-4 ${
-            row.fav ? 'fill-yellow-500 group-hover:fill-yellow-300' : 'fill-gray-500 group-hover:fill-yellow-300'
-          }`}
+          className={`absolute top-1 w-4 h-4 fill-gray-500 group-hover:fill-yellow-500 ${row.fav && 'fill-yellow-500'}`}
         />
       </div>
       <div

@@ -6,6 +6,7 @@ build({
     artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
     files: ['dist/**/*', '!node_modules'],
     includeSubNodeModules: true,
+    electronLanguages: ['ko'],
     directories: {
       output: 'release',
       buildResources: 'assets',
