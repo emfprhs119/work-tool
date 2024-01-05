@@ -41,6 +41,7 @@ export const ClipboardRow = ({ row, style }: ListRowProps & { row: ClipboardData
           content: '클립보드에 복사되었습니다.',
           duration: 1.5,
         });
+        window.myAPI.async('afterCopyClipboard');
       }}
       onContextMenu={() => window.myAPI.async('openFloatWindow', row)}
       className='relative border-0 border-solid border-b cursor-pointer break-all break-word overflow-hidden border:gray-100 border-gray-600 bg-default-hover'>

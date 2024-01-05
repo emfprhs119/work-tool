@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Layout } from 'antd';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Sider from 'antd/es/layout/Sider';
-import { Header } from 'antd/es/layout/layout';
+import { Content, Header } from 'antd/es/layout/layout';
 import { CaptionBar } from './components/main-layouts/CaptionBar';
 import { SideBottomBar, SideTopBar } from './components/main-layouts/SideBar';
 import { ClipboardTab } from './components/main-tabs/clipboard/ClipboardTab';
@@ -16,22 +16,24 @@ export const App = () => {
   }, [location]);
 
   return (
-    <Layout style={{ width: '100vw', height: '100vh' }}>
-      <Sider className='inactive ' width={64} style={{ backgroundColor: 'rgb(3 7 18)' }}>
+    <Layout>
+      <Sider className='inactive bg-black' width={64}>
         <div className='flex flex-col justify-between h-screen'>
           <SideTopBar />
           <SideBottomBar />
         </div>
       </Sider>
-      <Layout>
+      <Layout className=' overflow-hidden'>
         <Header className='inactive h-8 leading-7 p-0 bg-gray-900'>
           <CaptionBar />
         </Header>
-        <Routes>
-          <Route path='/' Component={ClipboardTab} />
-          <Route key={`clipboard`} path={`clipboard`} Component={ClipboardTab} />
-          <Route key={`settings`} path={`settings`} Component={SettingsTab} />
-        </Routes>
+        <Content className='flex flex-col h-[calc(100vh-2rem)]'>
+          <Routes>
+            <Route path='/' Component={ClipboardTab} />
+            <Route key={`clipboard`} path={`clipboard`} Component={ClipboardTab} />
+            <Route key={`settings`} path={`settings`} Component={SettingsTab} />
+          </Routes>
+        </Content>
       </Layout>
     </Layout>
   );

@@ -38,7 +38,9 @@ export const asyncFn = (_e: Electron.IpcMainInvokeEvent, args: any[]) => {
   else if (key === 'favoriteClipboard') favoriteClipboard(window, val.uuid);
   else if (key === 'removeClipboard') removeClipboard(window, val.uuid);
   else if (key === 'removeClipboardAll') removeClipboardAll(window);
-  else if (key === 'openFloatWindow') {
+  else if (key === 'afterCopyClipboard') {
+    if (getAppSettings().hideAfterCopyClipboard) window.hide();
+  } else if (key === 'openFloatWindow') {
     if (val.format === 'image/png') createFloatImageWindow(val.src, { width: val.width, height: val.height }, val.uuid);
     else if (val.format === 'text/plain') createFloatTextWindow(val.text, { width: 400, height: 300 }, val.uuid);
   } else if (key === 'cropAndCopyClipboard') {

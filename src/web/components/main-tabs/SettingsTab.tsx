@@ -5,13 +5,11 @@ import { SettingData } from '../../../lib/settings';
 export const SettingsTab = () => {
   const [settings, setSettings] = useState<SettingData>(window.myAPI.sync('getAppSettings'));
   const { modal } = App.useApp();
-  console.log(settings.autoStart);
   return (
-    <div className='m-3'>
+    <div className='p-3 flex flex-col overflow-y-auto overflow-x-clip'>
       <Form
         size={'middle'}
         layout='vertical'
-        style={{ width: '100%' }}
         onFieldsChange={(changedFields) => {
           window.myAPI.async('setAppSettings', { name: changedFields[0].name[0], value: changedFields[0].value });
         }}
@@ -61,6 +59,12 @@ export const SettingsTab = () => {
           name='autoStart'
           label='[윈도우 시작 시 자동시작]'
           initialValue={settings.autoStart ? 'checked' : ''}>
+          <Switch />
+        </Form.Item>
+        <Form.Item
+          name='hideAfterCopyClipboard'
+          label='[클립보드 복사 후 창 숨기기]'
+          initialValue={settings.hideAfterCopyClipboard ? 'checked' : ''}>
           <Switch />
         </Form.Item>
         {/* <Form.Item

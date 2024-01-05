@@ -7,7 +7,7 @@ document.addEventListener('keydown', (event) => {
     //if esc key was not pressed in combination with ctrl or alt or shift
     const isNotCombinedKey = !(event.ctrlKey || event.altKey || event.shiftKey);
     if (isNotCombinedKey) {
-      ipcRenderer.invoke('async', ['close']);
+      api.async('hide');
     }
   }
 });
