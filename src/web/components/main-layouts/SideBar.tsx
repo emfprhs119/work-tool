@@ -1,24 +1,25 @@
 import { useLocation } from 'react-router-dom';
 import Icon from '../common/Icon';
-import { SettingOutlined } from '@ant-design/icons';
+import { PropsWithChildren } from 'react';
+import Sider from 'antd/es/layout/Sider';
 
-export const SideTopBar = () => {
+export const SideBarWrap = ({ children }: PropsWithChildren) => {
   return (
-    <div className='active'>
-      <PathIcon path={'/clipboard'} icon={'clipboard'} />
-    </div>
+    <Sider className='inactive bg-black' width={64}>
+      <div className='flex flex-col justify-between h-screen'>{children}</div>
+    </Sider>
   );
 };
 
-export const SideBottomBar = () => {
-  return (
-    <div className='active'>
-      <PathAntdIcon path={'/settings'} AntdIcon={SettingOutlined} />
-    </div>
-  );
+export const SideTopBar = ({ children }: PropsWithChildren) => {
+  return <div className='active'>{children}</div>;
 };
 
-const PathIcon = ({ path, icon }: { path: string; icon: string }) => {
+export const SideBottomBar = ({ children }: PropsWithChildren) => {
+  return <div className='active'>{children}</div>;
+};
+
+export const PathIcon = ({ path, icon }: { path: string; icon: string }) => {
   const location = useLocation();
   const isSelected = location.pathname === path;
   return (
@@ -31,7 +32,7 @@ const PathIcon = ({ path, icon }: { path: string; icon: string }) => {
   );
 };
 
-const PathAntdIcon = ({ path, AntdIcon }: { path: string; AntdIcon: any }) => {
+export const PathAntdIcon = ({ path, AntdIcon }: { path: string; AntdIcon: any }) => {
   const location = useLocation();
   const isSelected = location.pathname === path;
   return (
