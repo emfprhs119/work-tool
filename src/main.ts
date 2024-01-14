@@ -8,6 +8,7 @@ import { screenshot } from './electron/screenshotV2';
 import { windowStateKeeper } from './lib/stateKeeper';
 import { createTrayIcon } from './electron/tray';
 import { autoStart } from './electron/autostart';
+import { getAppSettings } from './lib/settings';
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
@@ -41,7 +42,9 @@ if (!gotTheLock) {
         preload: path.resolve(__dirname, 'preload.js'),
         devTools: true,
       },
+      show: false,
     });
+    if (!getAppSettings().hiddenStart) win.show();
     mainWindowStateKeeper.track(win);
     startClipboardListening((clipboardTmp) => {
       win.webContents.send('clipboard', clipboardTmp);

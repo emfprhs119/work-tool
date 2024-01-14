@@ -61,6 +61,9 @@ export const SettingsTab = () => {
           initialValue={settings.autoStart ? 'checked' : ''}>
           <Switch />
         </Form.Item>
+        <Form.Item name='hiddenStart' label='[숨김 상태로 시작]' initialValue={settings.hiddenStart ? 'checked' : ''}>
+          <Switch />
+        </Form.Item>
         <Form.Item
           name='hideAfterCopyClipboard'
           label='[클립보드 복사 후 창 숨기기]'

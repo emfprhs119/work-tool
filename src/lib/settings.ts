@@ -4,6 +4,7 @@ import { autoStart } from '../electron/autostart';
 
 export interface SettingData {
   autoStart: boolean;
+  hiddenStart: boolean;
   hideAfterCopyClipboard: boolean;
   screenshotAfter: string[];
   screenshotSavePath: string;
@@ -13,6 +14,7 @@ export interface SettingData {
 export const getAppSettings = () => {
   return {
     autoStart: true,
+    hiddenStart: false,
     hideAfterCopyClipboard: true,
     screenshotAfter: ['save', 'floating'],
     screenshotSavePath: app.getPath('desktop'),
