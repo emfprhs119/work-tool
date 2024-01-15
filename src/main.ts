@@ -9,6 +9,7 @@ import { windowStateKeeper } from './lib/stateKeeper';
 import { createTrayIcon } from './electron/tray';
 import { autoStart } from './electron/autostart';
 import { getAppSettings } from './lib/settings';
+import { initHtmlViewer } from './electron/htmlViewerWork';
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
@@ -42,13 +43,13 @@ if (!gotTheLock) {
         preload: path.resolve(__dirname, 'preload.js'),
         devTools: true,
       },
-      show: false,
+      show: !getAppSettings().hiddenStart,
     });
-    if (!getAppSettings().hiddenStart) win.show();
     mainWindowStateKeeper.track(win);
     startClipboardListening((clipboardTmp) => {
       win.webContents.send('clipboard', clipboardTmp);
     });
+    initHtmlViewer();
     adjustContextMenu(win, [makeContextMenu(win, 'AlwaysOnTop'), makeContextMenu(win, 'HideWindow')]);
     win.loadFile('dist/index.html', { hash: 'main' });
     createTrayIcon(win);

@@ -2,14 +2,12 @@ import { BrowserWindow, NativeImage, app, clipboard, nativeImage } from 'electro
 import clipboardListener from '../lib/clipboard';
 import path from 'path';
 import { randomUUID } from 'crypto';
-import { mkdirSync, readFile, unlinkSync, writeFile, writeFileSync } from 'fs';
+import { mkdirSync, readFile, unlink, unlinkSync, writeFile, writeFileSync } from 'fs';
 import { ClipboardData } from '../@types/Context';
+import { clipboardImageBasePath, clipboardJsonPath } from '../res/file-path';
 
 export const clipboardTmp: ClipboardData[] = [];
-export const imgBasePath = path.join(app.getPath('userData'), 'png');
-const jsonPath = path.join(app.getPath('userData'), 'clipboard.json');
 
-mkdirSync(imgBasePath, { recursive: true });
 let preventOnce = false;
 
 export const startClipboardListening = (onChange: (clipboardTmp: ClipboardData[]) => void) => {
@@ -29,13 +27,14 @@ export const startClipboardListening = (onChange: (clipboardTmp: ClipboardData[]
         image.toDataURL() === nativeImage.createFromPath(clipboardTmp[0].src).toDataURL()
       )
         return;
-      const imgPath = path.join(imgBasePath, `${Date.now().toString()}.png`);
+      const imgFileName = `${Date.now().toString()}.png`;
+      const imgPath = path.join(clipboardImageBasePath, imgFileName);
       writeFileSync(imgPath, image.toPNG());
       clipboardTmp.unshift({
         uuid,
         date,
         format,
-        src: imgPath,
+        src: imgFileName,
         ...image.getSize(),
       });
     } else if (format === 'text/plain') {
@@ -52,9 +51,9 @@ export const startClipboardListening = (onChange: (clipboardTmp: ClipboardData[]
         text: plainText,
       });
     }
-    writeFile(jsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => onChange(clipboardTmp));
+    writeFile(clipboardJsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => onChange(clipboardTmp));
   });
-  readFile(jsonPath, { encoding: 'utf8' }, (error, data) => {
+  readFile(clipboardJsonPath, { encoding: 'utf8' }, (error, data) => {
     if (data) {
       clipboardTmp.push(...(JSON.parse(data) as unknown as ClipboardData[]));
     }
@@ -91,7 +90,7 @@ export const favoriteClipboard = (win: BrowserWindow, uuid: string) => {
   const idx = clipboardTmp.findIndex((c) => c.uuid === uuid);
   if (idx > -1) {
     clipboardTmp[idx].fav = !clipboardTmp[idx].fav;
-    writeFile(jsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => {
+    writeFile(clipboardJsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => {
       win.webContents.send('clipboard', clipboardTmp);
     });
   }
@@ -101,19 +100,23 @@ export const removeClipboard = (win: BrowserWindow, uuid: string) => {
   const idx = clipboardTmp.findIndex((c) => c.uuid === uuid);
   if (idx > -1) {
     const target = clipboardTmp[idx];
-    if (target.format === 'image/png' && target.src) unlinkSync(target.src);
+    if (target.format === 'image/png' && target.src) {
+      unlink(path.join(clipboardImageBasePath, target.src), (err) => {
+        if (err) console.error(err);
+      });
+    }
     clipboardTmp.splice(idx, 1);
-    writeFile(jsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => {
+    writeFile(clipboardJsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => {
       win.webContents.send('clipboard', clipboardTmp);
     });
   }
 };
 
 export const removeClipboardAll = (win: BrowserWindow) => {
-  unlinkSync(imgBasePath);
-  mkdirSync(imgBasePath, { recursive: true });
+  unlinkSync(clipboardImageBasePath);
+  mkdirSync(clipboardImageBasePath, { recursive: true });
   clipboardTmp.splice(0, clipboardTmp.length);
-  writeFile(jsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => {
+  writeFile(clipboardJsonPath, JSON.stringify(clipboardTmp), { encoding: 'utf8' }, () => {
     win.webContents.send('clipboard', clipboardTmp);
   });
 };

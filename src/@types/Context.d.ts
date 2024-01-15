@@ -22,3 +22,12 @@ export type ClipboardData = {
   height?: number;
   fav?: boolean;
 };
+
+export type HtmlViewerData = {
+  uuid: string;
+  date: number;
+  title: string;
+  src: string;
+  width?: number;
+  height?: number;
+};

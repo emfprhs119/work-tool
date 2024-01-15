@@ -5,7 +5,6 @@ import {
   copyClipboard,
   copyClipboardImg,
   favoriteClipboard,
-  imgBasePath,
   removeClipboard,
   removeClipboardAll,
 } from './clipboardWork';
@@ -16,6 +15,9 @@ import { copyFileSync, writeFileSync } from 'fs';
 import { generateSavePath } from '../lib/generateSavePath';
 import { getAppSettings, instantSettingsChange } from '../lib/settings';
 import { createFloatTextWindow } from './floatText';
+import { createFloatHtmlWindow } from './floatHtml';
+import { addHtmlViewer, htmlViewerTmp, removeHtmlViewer } from './htmlViewerWork';
+import { clipboardImageBasePath } from '../res/file-path';
 
 export const asyncFn = (_e: Electron.IpcMainInvokeEvent, args: any[]) => {
   const [key, val] = args;
@@ -40,13 +42,17 @@ export const asyncFn = (_e: Electron.IpcMainInvokeEvent, args: any[]) => {
   else if (key === 'removeClipboardAll') removeClipboardAll(window);
   else if (key === 'afterCopyClipboard') {
     if (getAppSettings().hideAfterCopyClipboard) window.hide();
+  } else if (key === 'addHtmlViewer') addHtmlViewer(window, val.src, val.title);
+  else if (key === 'removeHtmlViewer') removeHtmlViewer(window, val.uuid);
+  else if (key === 'openFloatHtmlWindow') {
+    createFloatHtmlWindow(val.src, val.title, { width: val.width, height: val.height }, val.uuid);
   } else if (key === 'openFloatWindow') {
     if (val.format === 'image/png') createFloatImageWindow(val.src, { width: val.width, height: val.height }, val.uuid);
     else if (val.format === 'text/plain') createFloatTextWindow(val.text, { width: 400, height: 300 }, val.uuid);
   } else if (key === 'cropAndCopyClipboard') {
     const image = nativeImage.createFromPath(val.src);
     const cropImage = image.crop(val.rect);
-    const cropImagePath = path.join(imgBasePath, `${Date.now().toString()}.png`);
+    const cropImagePath = path.join(clipboardImageBasePath, `${Date.now().toString()}.png`);
     writeFileSync(cropImagePath, cropImage.toPNG());
     const appSettings = getAppSettings();
     if (appSettings.screenshotAfter.includes('save')) copyFileSync(cropImagePath, generateSavePath());
@@ -71,7 +77,9 @@ export const syncFn = (_e: Electron.IpcMainEvent, args: any[]) => {
   const window = BrowserWindow.fromWebContents(_e.sender);
   if (!window || window.isDestroyed()) return;
   else if (key === 'isAlwaysOnTop') _e.returnValue = window.isAlwaysOnTop();
+  else if (key === 'getClipboardImageBasePath') _e.returnValue = clipboardImageBasePath;
   else if (key === 'getClipboard') _e.returnValue = clipboardTmp;
+  else if (key === 'getHtmlViewer') _e.returnValue = htmlViewerTmp;
   else if (key === 'openDirectory') {
     const result = dialog.showOpenDialogSync(window, {
       properties: ['openDirectory'],

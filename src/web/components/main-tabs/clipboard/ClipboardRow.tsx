@@ -4,20 +4,19 @@ import { ClipboardData } from '../../../../@types/Context';
 import { htmlToEditor } from '../../../../lib/string';
 import { timeSince } from '../../../../lib/time';
 import Icon from '../../common/Icon';
-
 const getContentData = (row: ClipboardData) => {
   switch (row.format) {
     case 'image/png':
-      if (row.src && row.width && row.height)
+      if (row.src && row.width && row.height) {
         return (
           <img
-            src={row.src}
+            src={`${window.myAPI.sync('getClipboardImageBasePath')}/${row.src}`}
             className={`m-0.5 h-[calc(100%-1.5rem)] max-w-[calc(100%-2rem)] mb-4 ml-1 mr-8 z-10 hover:fixed hover:max-w-none ${
               row.width > row.height ? 'hover:h-60' : 'hover:h-60'
             }`}
           />
         );
-
+      }
     default:
       return (
         <div

@@ -1,12 +1,12 @@
-import { NavBar } from '../../main-layouts/NavBar';
+import { NavBar } from '../main-layouts/NavBar';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import List, { ListRowProps } from 'react-virtualized/dist/commonjs/List';
 import { useEffect, useState } from 'react';
-import { NavIcon } from '../../common/NavIcon';
-import { useClipboardList } from './useClipboardList';
-import { NavType } from './types';
-import { ClipboardRow } from './ClipboardRow';
-import { SearchInput } from '../../common/SearchInput';
+import { NavIcon } from '../common/NavIcon';
+import { useClipboardList } from './clipboard/useClipboardList';
+import { NavType } from './clipboard/types';
+import { ClipboardRow } from './clipboard/ClipboardRow';
+import { SearchInput } from '../common/SearchInput';
 
 export function ClipboardTab() {
   const [nav, setNav] = useState<NavType>('history');
