@@ -1,13 +1,20 @@
 import { BrowserWindow, Menu, app } from 'electron';
 
-export const adjustContextMenu = (window: BrowserWindow, menu: Electron.MenuItemConstructorOptions[] = []) => {
+export const adjustContextMenu = (
+  window: BrowserWindow,
+  menu: () => Electron.MenuItemConstructorOptions[] = () => []
+) => {
   const WM_INITMENU = 0x0116;
-  window.hookWindowMessage(WM_INITMENU, () => {
-    window.setEnabled(false);
-    window.setEnabled(true);
-    const buildMenu = Menu.buildFromTemplate(menu);
-    buildMenu.popup();
-  });
+  const setSystemContextMenu = () =>
+    window.hookWindowMessage(WM_INITMENU, () => {
+      window.setEnabled(false);
+      window.setEnabled(true);
+      const buildMenu = Menu.buildFromTemplate(menu());
+      buildMenu.popup();
+    });
+  setSystemContextMenu();
+  window.addListener('always-on-top-changed', setSystemContextMenu);
+  setTimeout(() => window.setAlwaysOnTop(window.isAlwaysOnTop()), 500);
 };
 
 export const makeContextMenu = (

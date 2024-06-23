@@ -11,7 +11,7 @@ export function createFloatImageWindow(
   uuid?: string
 ) {
   const { x, y, width, height } = coords;
-  const window = new BrowserWindow({
+  const win = new BrowserWindow({
     skipTaskbar: true,
     frame: false,
     x,
@@ -34,14 +34,15 @@ export function createFloatImageWindow(
     minHeight: 10 * (width / height),
     opacity: 0,
   });
-  window.setAspectRatio(width / height);
-  window.on('show', () => {
-    window.setOpacity(1);
+  win.setAspectRatio(width / height);
+  win.on('show', () => {
+    win.setOpacity(1);
   });
-  adjustContextMenu(window, [
+
+  adjustContextMenu(win, () => [
     {
       label: '원본 크기로 되돌리기',
-      click: () => window.setSize(width, height),
+      click: () => win.setSize(width, height),
     },
     {
       label: '클립보드 복사',
@@ -60,7 +61,7 @@ export function createFloatImageWindow(
     {
       label: '다른 이름으로 저장',
       click: () => {
-        const result = dialog.showSaveDialogSync(window, {
+        const result = dialog.showSaveDialogSync(win, {
           defaultPath: path.join(app.getPath('desktop'), 'image.png'),
           filters: [{ extensions: ['png'], name: 'PNG' }],
         });
@@ -70,8 +71,8 @@ export function createFloatImageWindow(
       },
     },
     { type: 'separator' },
-    makeContextMenu(window, 'AlwaysOnTop'),
-    makeContextMenu(window, 'CloseWindow'),
+    makeContextMenu(win, 'AlwaysOnTop'),
+    makeContextMenu(win, 'CloseWindow'),
   ]);
   const tagImg = `<img id="screenshot" onLoad="showWindow()" onFail="closeWindow()" src=${fileFullPath} alt="screenshot">`;
   const script = `function showWindow(){setTimeout(()=>window.myAPI.async('show'),200)};`;
@@ -87,5 +88,5 @@ export function createFloatImageWindow(
         width: 100%
     }
     </style>`;
-  window.loadURL(`data:text/html;charset=utf-8,<head>${style}</head><body>${tagImg}<script>${script}</script></body>`);
+  win.loadURL(`data:text/html;charset=utf-8,<head>${style}</head><body>${tagImg}<script>${script}</script></body>`);
 }

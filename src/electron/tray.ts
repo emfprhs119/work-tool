@@ -14,5 +14,7 @@ export const createTrayIcon = (win: BrowserWindow) => {
     }
   });
   const contextMenu = Menu.buildFromTemplate([makeContextMenu(win, 'CloseApp')]);
+  tray.setTitle('work-tool');
+  tray.setToolTip('work-tool');
   tray.setContextMenu(contextMenu);
 };

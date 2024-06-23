@@ -36,7 +36,7 @@ export function createFloatTextWindow(
   //   if (DEBUG) win.webContents.openDevTools({ mode: 'detach' });
 
   win.removeMenu();
-  adjustContextMenu(win, [
+  adjustContextMenu(win, () => [
     {
       label: '원본 크기로 되돌리기',
       click: () => win.setSize(width, height),

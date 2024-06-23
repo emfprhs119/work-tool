@@ -50,7 +50,7 @@ if (!gotTheLock) {
       win.webContents.send('clipboard', clipboardTmp);
     });
     initHtmlViewer();
-    adjustContextMenu(win, [makeContextMenu(win, 'AlwaysOnTop'), makeContextMenu(win, 'HideWindow')]);
+    adjustContextMenu(win, () => [makeContextMenu(win, 'AlwaysOnTop'), makeContextMenu(win, 'HideWindow')]);
     win.loadFile('dist/index.html', { hash: 'main' });
     createTrayIcon(win);
     if (DEBUG) win.webContents.openDevTools({ mode: 'detach' });

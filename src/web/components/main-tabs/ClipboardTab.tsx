@@ -7,18 +7,22 @@ import { useClipboardList } from './clipboard/useClipboardList';
 import { NavType } from './clipboard/types';
 import { ClipboardRow } from './clipboard/ClipboardRow';
 import { SearchInput } from '../common/SearchInput';
+import { Form } from 'antd';
 
 export function ClipboardTab() {
   const [nav, setNav] = useState<NavType>('history');
   const [search, setSearch] = useState<string>('');
   const list = useClipboardList(nav, search);
+  const [form] = Form.useForm();
   useEffect(() => {
     const grid = window.document.getElementsByClassName('ReactVirtualized__Grid').item(0);
     if (grid) grid.scrollTop = 0;
+    form.resetFields();
+    setSearch('');
   }, [nav]);
   return (
     <>
-      <SearchInput search={search} setSearch={setSearch} />
+      <SearchInput search={search} setSearch={setSearch} form={form} />
       <div className='h-full w-full'>
         <AutoSizer>
           {({ width, height }) => (

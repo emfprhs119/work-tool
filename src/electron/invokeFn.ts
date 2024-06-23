@@ -47,8 +47,10 @@ export const asyncFn = (_e: Electron.IpcMainInvokeEvent, args: any[]) => {
   else if (key === 'openFloatHtmlWindow') {
     createFloatHtmlWindow(val.src, val.title, { width: val.width, height: val.height }, val.uuid);
   } else if (key === 'openFloatWindow') {
-    if (val.format === 'image/png') createFloatImageWindow(val.src, { width: val.width, height: val.height }, val.uuid);
-    else if (val.format === 'text/plain') createFloatTextWindow(val.text, { width: 400, height: 300 }, val.uuid);
+    if (val.format === 'image/png') {
+      const fullPath = path.join(clipboardImageBasePath, val.src);
+      createFloatImageWindow(fullPath, { width: val.width, height: val.height }, val.uuid);
+    } else if (val.format === 'text/plain') createFloatTextWindow(val.text, { width: 400, height: 300 }, val.uuid);
   } else if (key === 'cropAndCopyClipboard') {
     const image = nativeImage.createFromPath(val.src);
     const cropImage = image.crop(val.rect);

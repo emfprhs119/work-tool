@@ -2,16 +2,18 @@ import { Form, Input } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRef } from 'react';
+import { FormInstance } from 'antd';
 
 export const SearchInput = ({
   search,
   setSearch,
+  form,
 }: {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  form: FormInstance;
 }) => {
   const searchRef = useRef(null);
-  const [form] = Form.useForm();
   return (
     <Form form={form} className='mr-1 p-0' style={{ height: 35 }}>
       <Form.Item name={'search'}>

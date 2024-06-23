@@ -5,12 +5,32 @@ import { randomUUID } from 'crypto';
 import { mkdirSync, readFile, unlink, unlinkSync, writeFile, writeFileSync } from 'fs';
 import { ClipboardData } from '../@types/Context';
 import { clipboardImageBasePath, clipboardJsonPath } from '../res/file-path';
-
+// import ioHook from 'iohook';
 export const clipboardTmp: ClipboardData[] = [];
 
 let preventOnce = false;
 
+// setInterval(() => {
+//   console.log(clipboard.readText('selection'));
+// }, 1000);
+
+// const printSelectedText = (selectedText: string) => {
+//   console.log(`Selected Text: ${selectedText}`);
+// };
 export const startClipboardListening = (onChange: (clipboardTmp: ClipboardData[]) => void) => {
+  // registerShortcut('F6', printSelectedText);
+  // ioHook.on('mousemove', (event: {}) => {
+  // console.log(event); // { type: 'mousemove', x: 700, y: 400 }
+  // mainWindow.webContents.send('mousemove', event);
+  // });
+
+  // ioHook.on('mouseclick', (event: {}) => {
+  // console.log(event);
+  // mainWindow.webContents.send('mouseclick', event);
+  // });
+
+  // Register and start hook
+  // ioHook.start();
   clipboardListener.on('change', async () => {
     if (preventOnce) {
       preventOnce = false;
@@ -68,7 +88,8 @@ export const copyClipboard = (uuid: string) => {
     switch (clip.format) {
       case 'image/png':
         if (clip.src) {
-          const image = nativeImage.createFromPath(clip.src);
+          const fullPath = path.join(clipboardImageBasePath, clip.src);
+          const image = nativeImage.createFromPath(fullPath);
           clipboard.writeImage(image);
         } else console.warn('missing clipboard data');
         break;

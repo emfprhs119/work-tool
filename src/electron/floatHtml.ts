@@ -35,7 +35,7 @@ export function createFloatHtmlWindow(
   if (DEBUG) win.webContents.openDevTools({ mode: 'detach' });
 
   win.removeMenu();
-  adjustContextMenu(win, [makeContextMenu(win, 'AlwaysOnTop'), makeContextMenu(win, 'CloseWindow')]);
+  adjustContextMenu(win, () => [makeContextMenu(win, 'AlwaysOnTop'), makeContextMenu(win, 'CloseWindow')]);
   win.focus();
   win.loadURL(path.join(htmlViewerBasePath, fileFullPath));
 }
